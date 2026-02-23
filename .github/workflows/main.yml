@@ -37,7 +37,7 @@ jobs:
           java-version: 11
 
       - name: cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -84,7 +84,7 @@ jobs:
           overwrite: true
 
       - name: Upload APK
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: apk
           path: ./android/app/build/outputs/apk/debug
