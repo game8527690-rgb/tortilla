@@ -62,8 +62,6 @@ jobs:
     #   - name: Rebuilding the React project
         # run: npm run build
 
-      - name: Adding Android sample project
-        run: npx cap add android && ls -a && pwd && npm run build
 
       - name: React build folder to Android sample project
         run: npx cap copy android
