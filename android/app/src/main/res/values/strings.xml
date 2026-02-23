@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">who-pays</string>
+    <string name="title_activity_main">who-pays</string>
+    <string name="package_name">com.yair.whopays</string>
+    <string name="custom_url_scheme">com.yair.whopays</string>
+</resources>
