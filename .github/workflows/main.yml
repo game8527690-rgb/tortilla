@@ -55,8 +55,8 @@ jobs:
       - name: Install globally Ionic CLI
         run: npm install -g @ionic/cli
 
-      - name: Rebuilding the React project
-        run: npm run build
+    #   - name: Rebuilding the React project
+        # run: npm run build
 
       - name: Adding Android sample project
         run: npx cap add android && ls -a && pwd && npm run build
