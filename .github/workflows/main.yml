@@ -54,6 +54,10 @@ jobs:
 
       - name: Install globally Ionic CLI
         run: npm install -g @ionic/cli
+      - name: Install globally Capacitor CLI
+        run: npm install -g @capacitor/cli
+      - name: Install cap android
+        run: npm install @capacitor/android
 
     #   - name: Rebuilding the React project
         # run: npm run build
