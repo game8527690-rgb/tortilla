@@ -66,8 +66,8 @@ jobs:
       - name: React build folder to Android sample project
         run: npx cap copy android
 
-      - name: Icon part
-        run: npm run resources
+    #   - name: Icon part
+    #     run: npm run resources
 
       - name: Root directory looks like
         run: ls -a && pwd
