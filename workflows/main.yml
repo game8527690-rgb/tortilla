@@ -1,0 +1,73 @@
+name: From React to Android App
+
+on:
+  push:
+    branches:
+      - '*'
+      - '*/*'
+      - '**'
+      - '!master'
+  
+  jobs:
+  init:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.18.0]
+    steps:
+    - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H-%M-%S')"
+      - name: print date 
+        run: echo "${{ steps.date.outputs.date }}"
+    - name: Clone project
+        uses: actions/checkout@v1
+    - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+    - name: Setup JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+    - name: cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+    - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+    - name: Install project dependencies
+        run: npm install
+    - name: Install globally Ionic CLI 
+        run: npm install -g @ionic/cli
+    - name: Rebuilding the React project
+        # run: npm run build
+    - name: Adding Android sample project 
+        run: npx cap add android && ls -a && pwd && npm run build
+    - name: React build folder to Android sample project
+        run: npx cap copy android
+    - name: Icon part
+        run: npm run resources
+    - name: Root directory looks like
+        run: ls -a && pwd
+    - name: Gradle Build the APK as a JAR
+        working-directory: ./android
+        run: bash ./gradlew assembleDebug --stacktrace
+    - name: Upload debug to Google Drive at folder 1fPCyBND_9TwxTvJTbpSe6b-HxGzuJWjE
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: Google Drive API token
+          filename: ./android/app/build/outputs/apk/debug/app-debug.apk
+          folderId: '1fPCyBND_9TwxTvJTbpSe6b-HxGzuJWjE'
+          name: 'who-pays-version-${{ steps.date.outputs.date }}.apk' 
+          overwrite: true
+    - name: Upload APK
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk
+          path: ./android/app/build/outputs/apk/debug
