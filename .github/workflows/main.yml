@@ -32,9 +32,10 @@ jobs:
         id: extract_branch
 
       - name: Setup JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: 11
+          distribution: temurin
+          java-version: 17
 
       - name: cache node modules
         uses: actions/cache@v3
@@ -66,8 +67,8 @@ jobs:
       - name: React build folder to Android sample project
         run: npx cap copy android
 
-    #   - name: Icon part
-    #     run: npm run resources
+      - name: Icon part
+        run: npm run resources
 
       - name: Root directory looks like
         run: ls -a && pwd
@@ -75,6 +76,12 @@ jobs:
       - name: Gradle Build the APK as a JAR
         working-directory: ./android
         run: bash ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: ./android/app/build/outputs/apk/debug
 
       - name: Upload debug to Google Drive at folder 1fPCyBND_9TwxTvJTbpSe6b-HxGzuJWjE
         uses: adityak74/google-drive-upload-git-action@main
@@ -84,9 +91,3 @@ jobs:
           folderId: '1fPCyBND_9TwxTvJTbpSe6b-HxGzuJWjE'
           name: 'who-pays-version-${{ steps.date.outputs.date }}.apk'
           overwrite: true
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk
-          path: ./android/app/build/outputs/apk/debug
