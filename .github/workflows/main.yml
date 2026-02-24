@@ -64,8 +64,8 @@ jobs:
         # run: npm run build
 
 
-      - name: React build folder to Android sample project
-        run: npx cap copy android
+      - name: Sync web build and Cordova plugins to Android
+        run: npx cap sync android
 
       - name: Icon part
         run: npm run resources
